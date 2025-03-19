@@ -2,7 +2,6 @@ fastapi
 uvicorn
 websockets
 pydantic
-sqlite3
 faiss-cpu
 numpy
 rank-bm25

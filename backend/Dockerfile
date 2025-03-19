@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory to backend
-WORKDIR /backend
+WORKDIR /backend/app.py
 
 # Copy requirements file first for better caching
 COPY requirements.txt .

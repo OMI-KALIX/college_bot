@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory to backend
-WORKDIR /backend/app.py
+WORKDIR /backend
 
 # Copy requirements file first for better caching
 COPY requirements.txt .
@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 8000
 
 # Run FastAPI using Uvicorn
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend:app", "--host", "0.0.0.0", "--port", "8000"]

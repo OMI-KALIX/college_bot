@@ -21,7 +21,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 # Serve static files (CSS, JS, etc.)
-app.mount("/backend/static", StaticFiles(directory="D:/1_college bot/with_api_bot/backend/static"), name="static")
+app.mount("/backend/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # Serve index.html at root endpoint
 @app.get("/")

@@ -22,7 +22,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 # Serve static files (CSS, JS, etc.)
-from pathlib import Path
+
 app.mount("/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static")
 
 

@@ -2,19 +2,24 @@
 FROM python:3.11
 
 # Install system dependencies, including SQLite3
-RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev
+RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory inside the container
+# Set working directory to backend
 WORKDIR /backend
 
-# Copy only the backend directory contents into the container
+# Copy requirements file first for better caching
+COPY requirements.txt .
+
+# Upgrade pip and install dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy all backend files into the container
 COPY . .
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Expose FastAPI on port 8000
+# Expose FastAPI port
 EXPOSE 8000
 
-# ✅ Run Uvicorn with the correct path
+# Run FastAPI using Uvicorn
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

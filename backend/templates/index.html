@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Exo', sans-serif;
+            transition: all 0.3s ease;
+        }
+         body {
+            background: linear-gradient(45deg, rgba(255, 0, 123, 1) 0%, rgba(0, 255, 255, 1) 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            flex-direction: column;
+        }
+        /* Floating Chatbot Icon */
+        #chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        #chatbot-icon:hover {
+            transform: scale(1.1);
+        }
+
+        #chatbot-icon img {
+            width: 70px;
+            height: 70px;
+        }
+
+        /* Chat Popup */
+        #chat-container {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 400px;
+            height: 550px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        /* Close Button */
+        #close-chat {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Chat Box */
+        #chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Chat Messages */
+        #chat-box p {
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin: 5px 0;
+            width: fit-content;
+            max-width: 80%;
+        }
+
+        /* User Message */
+        .user-message {
+            background: #007bff;
+            color: #fff;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        /* Bot Message */
+        .bot-message {
+            background: #e0e0e0;
+            color: black;
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        /* Input Container */
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 10px;
+        }
+
+        /* Input Field */
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            outline: none;
+            background: #fff;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Send Button */
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #007bff 0%, #00d4ff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Button Hover */
+        button:hover {
+            background: linear-gradient(135deg, #00d4ff 0%, #007bff 100%);
+            transform: translateY(-2px);
+        }
+
+        /* Button Active */
+        button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Chatbot Icon -->
+    <div id="chatbot-icon">
+        <img src="/backend/static/bot.png" alt="Chatbot">
+    </div>
+
+    <!-- Chat Popup -->
+    <div id="chat-container">
+        <span id="close-chat">&times;</span>
+        <h1 style="color: #007bff; text-align: center;">Academia Assistant</h1>
+        <div id="chat-box"></div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let chatbotIcon = document.getElementById("chatbot-icon");
+        let chatContainer = document.getElementById("chat-container");
+        let closeChat = document.getElementById("close-chat");
+
+        // Toggle chat popup
+        chatbotIcon.onclick = function () {
+            chatContainer.style.display = "flex";
+        };
+
+        closeChat.onclick = function () {
+            chatContainer.style.display = "none";
+        };
+
+        let ws = new WebSocket("ws://localhost:8000/chat");
+
+        ws.onerror = function (event) {
+            console.error("WebSocket Error:", event);
+        };
+
+        ws.onclose = function () {
+            console.warn("WebSocket Closed! Reconnecting...");
+            setTimeout(() => {
+                ws = new WebSocket("ws://localhost:8000/chat");
+            }, 3000);
+        };
+
+        ws.onmessage = function (event) {
+            let data = JSON.parse(event.data);
+            let chatBox = document.getElementById("chat-box");
+
+            let botMessage = document.createElement("p");
+            botMessage.classList.add("bot-message");
+            botMessage.innerHTML = `<strong>Bot:</strong> ${data.response}`;
+            chatBox.appendChild(botMessage);
+
+            // Show suggestions as clickable options
+            if (data.suggestions && data.suggestions.length > 0) {
+                let suggestionText = document.createElement("p");
+                suggestionText.classList.add("bot-message");
+                suggestionText.innerHTML = `<strong>Did you mean:</strong>`;
+                chatBox.appendChild(suggestionText);
+
+                let suggestionList = document.createElement("ul");
+                suggestionList.style.listStyleType = "none";
+                suggestionList.style.padding = "0";
+
+                data.suggestions.forEach(suggestion => {
+                    let suggestionItem = document.createElement("li");
+                    suggestionItem.style.cursor = "pointer";
+                    suggestionItem.style.color = "#007bff";
+                    suggestionItem.style.margin = "5px 0";
+                    suggestionItem.innerHTML = suggestion;
+
+                    // Click event to send selected suggestion
+                    suggestionItem.onclick = function () {
+                        document.getElementById("user-input").value = suggestion;
+                        sendMessage();
+                    };
+
+                    suggestionList.appendChild(suggestionItem);
+                });
+
+                chatBox.appendChild(suggestionList);
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to latest message
+        };
+
+        function sendMessage() {
+            let userInput = document.getElementById("user-input").value;
+            if (!userInput.trim()) return;
+            let chatBox = document.getElementById("chat-box");
+            let userMessage = document.createElement("p");
+            userMessage.classList.add("user-message");
+            userMessage.innerHTML = `<strong>You:</strong> ${userInput}`;
+            chatBox.appendChild(userMessage);
+            ws.send(userInput);
+            document.getElementById("user-input").value = "";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+websockets
+pydantic
+sqlite3
+faiss-cpu
+numpy
+rank-bm25
+sentence-transformers
+scikit-learn
+pyyaml
+sentry-sdk
+streamlit
+pandas
+plotly
+jinja2

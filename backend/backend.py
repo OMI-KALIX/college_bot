@@ -7,6 +7,7 @@ from pydantic import BaseModel
 import sqlite3
 import faiss
 import numpy as np
+from pathlib import Path
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -21,7 +22,9 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 # Serve static files (CSS, JS, etc.)
-app.mount("/backend/static", StaticFiles(directory="college_bot/backend/static"), name="static")
+from pathlib import Path
+app.mount("/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static")
+
 
 # Serve index.html at root endpoint
 @app.get("/")

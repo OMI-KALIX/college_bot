@@ -5,7 +5,7 @@ FROM python:3.11
 RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory inside the container
+# Set working directory inside the container
 WORKDIR /backend
 
 # Copy requirements file first for better caching
@@ -18,8 +18,12 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy all backend files into the container
 COPY . .
 
+# Ensure the backend is a Python package
+RUN touch /backend/__init__.py
+
 # Expose FastAPI port
 EXPOSE 8000
 
 # Run FastAPI using Uvicorn
-CMD ["uvicorn", "backend:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "backend.app2:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+

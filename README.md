@@ -1,5 +1,9 @@
 # 🎓 **CollegeBot – Smart AI-Powered Campus Assistant**  
 
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logo=streamlit)](https://streamlit.io/)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 > _An intelligent chatbot system designed for universities and colleges, built with FastAPI and a dynamic FAQ system._
 
 ---
@@ -16,22 +20,20 @@
 
 ---
 
-## 🗂️ **Project Structure**
+## ⚙️ Project Structure
 
+```
 college_bot/
 └── backend/
-├── app2.py 👉 FastAPI server
-├── admin/dashboard.py 👉 Admin dashboard logic
-├── data/faqs.yaml 👉 FAQ knowledge base
-├── database/chatbot.db 👉 SQLite database
-├── static/ 👉 CSS & images
-└── templates/ 👉 HTML pages
+    ├── app2.py               # ▶ FastAPI Server with NLP logic
+    ├── admin/dashboard.py    # ▶ Streamlit Admin Panel
+    ├── data/faqs.yaml        # ▶ Editable FAQ knowledge base
+    ├── database/chatbot.db   # ▶ SQLite chat logs & feedback
+    ├── static/               # ▶ CSS, icons
+    └── templates/index.html  # ▶ Web UI for chatbot
 
-yaml
-Copy
-Edit
 
----
+```
 
 ## 🚀 **Getting Started**
 
@@ -59,79 +61,23 @@ pip install -r requirements.txt
 
 # Run the app
 uvicorn app2:app --reload
-📂 Open your browser → http://localhost:8000
+```
+## 🛡️ License
 
-🧪 API Docs → http://localhost:8000/docs
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-💬 How It Works
-User types a question
+📄 This project is licensed under the MIT License.  
+✅ You are free to:
+- Use
+- Modify
+- Share 
 
-System searches the faqs.yaml
+*(with attribution)*
 
-Best matching answer is returned
+## 👨‍💻 Author
 
-If no match found, fallback message is shown
+**OMI-KALIX**  
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-blue?logo=github)](https://github.com/OMI-KALIX)
 
-Admin can update FAQs live with no restart
-
-📘 Editing FAQs (YAML)
-🗂️ backend/data/faqs.yaml
-
-yaml
-Copy
-Edit
-- question: What is the admission process?
-  answer: Fill the form on the official site and submit required documents.
-
-- question: How do I access the college Wi-Fi?
-  answer: Contact the IT cell with your student ID.
-✅ Just save the file — no need to restart the server.
-
-🧠 AI & NLP Integration (Optional)
-You can plug in advanced NLP tools for enhanced chatbot responses:
-
-🧩 spaCy / NLTK for preprocessing
-
-🔍 BM25 / FAISS / Transformers for semantic search
-
-🤖 Ollama / GPT / LLaMA for natural dialogue
-
-🧠 LangChain for chaining responses and context
-
-🧪 Testing & Debugging
-Use the Swagger UI for API testing:
-
-bash
-Copy
-Edit
-http://localhost:8000/docs
-You can interact with all endpoints, view errors, and see request/response formats.
-
-🌐 Frontend
-index.html is the main chat UI
-
-styles.css styles the chatbot
-
-Use /static for images or theme changes
-
-Easy to embed into your college website/portal
-
-🎯 Future Plans
-📌 Voice input (speech-to-text via Whisper)
-📌 TTS output for accessibility
-📌 Telegram/WhatsApp Bot support
-📌 WebSocket chat (real-time)
-📌 Student login & authentication
-📌 College-specific API integration (attendance, timetable)
-
-🛡️ License
-📄 This project is licensed under the MIT License.
-✅ You are free to use, modify, and share with attribution.
-
-👨‍💻 Author
-Made with 💙 by OMI-KALIX
-
-⭐ Like this project?
-Star the repo 🌟
-Fork it 🔁
-Improve it 💡
+Made with 💙 by OMI-KALIX  
+> For collaboration or deployment inquiries - contact via GitHub!

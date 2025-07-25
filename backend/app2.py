@@ -32,7 +32,7 @@ async def serve_homepage(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 # Initialize Sentry for error tracking
-sentry_sdk.init(dsn="https://9de4cb18f67c30a7f12a911188d79356@o4508977391468544.ingest.us.sentry.io/4508977455759360", traces_sample_rate=1.0)
+sentry_sdk.init(dsn="Add your sentry sdk", traces_sample_rate=1.0)
 
 # SQLite Database Setup
 DB_PATH = os.path.join(os.path.dirname(__file__), "database", "chatbot.db")

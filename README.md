@@ -76,7 +76,7 @@ uvicorn app2:app --reload
 
 ## 👨‍💻 Author
 
-**OMI-KALIX**  
+**OMKAR SAWANT**  
 [![GitHub](https://img.shields.io/badge/GitHub-Profile-blue?logo=github)](https://github.com/OMI-KALIX)
 
 Made with 💙 by OMI-KALIX  
